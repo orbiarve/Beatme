@@ -3,10 +3,33 @@
 }
 .Main h1 {
     font-size: 100px;
+
 }
 .form-control {
     width: 25%; 
     margin-left:38%;
-    margin-top: 20px;
 }
     
+.count {
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-top:60px;
+}
+
+.participant1 {
+    background: yellowgreen;
+    padding:10px;
+    border-radius: 10px;
+
+}
+.participant2 {
+    background: orange;
+    padding:10px;
+    border-radius: 10px;
+
+}.participant3 {
+    background: orangered;
+    padding:10px;
+    border-radius: 10px;
+
+}
