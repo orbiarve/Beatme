@@ -12,7 +12,8 @@ class Main extends Component {
             message: 'no timestamp yet',
             name: 'type name',
             showdata : this.displayData,
-            postVal : ""
+            postVal : "",
+            userName: "other user",
 
         };
         subscribeToTimer((err, message) => this.setState({ 
@@ -32,6 +33,11 @@ class Main extends Component {
                 console.log(msg)
                 this.appendData()});
         });
+        socket.on('name', (name) => {
+            this.setState({
+                userName: name
+            });
+        });
       }
       appendData() {
         this.displayData.push(<div  id="display-data"><pre>{this.state.postVal}</pre></div>);
@@ -48,9 +54,9 @@ class Main extends Component {
       nameInput (event) {
         this.setState({
           name: event.target.value
+        }, () => {
+            socket.emit('nameChange', this.state.name);
         })
-
-
       }
 
   render() {
@@ -82,7 +88,7 @@ class Main extends Component {
             </div>
             <div className='col-md-6 tracker'>
                 <div className='col-md-12 participant1'>
-                Oriana
+                {this.state.userName}
                 </div>
                 <div className='col-md-12 participant2'>
                 {this.state.name}
