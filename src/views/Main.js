@@ -1,14 +1,65 @@
 import React, { Component } from 'react';
+import { subscribeToTimer } from '../components/Socket';
+import openSocket from 'socket.io-client';
 import './Main.css';
 
+const  socket = openSocket('http://192.168.1.78:8000');
 class Main extends Component {
+    constructor(props) {
+        super(props);
+        this.displayData = [];
+        this.state = {
+            message: 'no timestamp yet',
+            name: 'type name',
+            showdata : this.displayData,
+            postVal : ""
+        };
+        subscribeToTimer((err, message) => this.setState({ 
+          message 
+        }, () => {
+            console.log(message);
+        }));
+        this.sendPoint = this.sendPoint.bind(this);
+        this.appendData = this.appendData.bind(this);
+      }
+      componentDidMount() {
+        socket.on('sendMessage', (msg) => {
+            this.setState({
+                postVal: msg
+            }, () => { 
+                console.log(msg)
+                this.appendData()});
+        });
+      }
+      appendData() {
+        this.displayData.push(<div  id="display-data"><pre>{this.state.postVal}</pre></div>);
+        this.setState({
+           showdata : this.displayData,
+           postVal : ""
+        });
+     }
+      sendPoint() {
+        const message = document.getElementById('Task').value;
+        socket.emit('message', message);
+        
+      }
+
   render() {
+
+    
     return (
       <div className="Main">
-        <h1> Hi, Oriana!</h1>
+        <h1> Hi, {this.state.name}!</h1>
         <div className='col-md-12'>
             <input id='Task' className='form-control' placeholder='Name of Task'/>
+            <a className="btn" onClick={this.sendPoint} id="messageSubmit">Submit</a>
         </div>
+        <p className="App-intro">
+      This is the timer value: {this.state.message}
+      </p>
+      <div id="display-data-Container">
+             {this.displayData}
+             </div>
         <div className='col-md-3'></div>
         <div className='col-md-6 count'>
             <div className='col-md-12 '>
