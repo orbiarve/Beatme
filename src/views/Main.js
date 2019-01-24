@@ -13,6 +13,7 @@ class Main extends Component {
             name: 'type name',
             showdata : this.displayData,
             postVal : ""
+
         };
         subscribeToTimer((err, message) => this.setState({ 
           message 
@@ -21,6 +22,7 @@ class Main extends Component {
         }));
         this.sendPoint = this.sendPoint.bind(this);
         this.appendData = this.appendData.bind(this);
+        this.nameInput = this.nameInput.bind(this);
       }
       componentDidMount() {
         socket.on('sendMessage', (msg) => {
@@ -43,13 +45,21 @@ class Main extends Component {
         socket.emit('message', message);
         
       }
+      nameInput (event) {
+        this.setState({
+          name: event.target.value
+        })
+
+
+      }
 
   render() {
 
     
     return (
       <div className="Main">
-        <h1> Hi, {this.state.name}!</h1>
+        <h1> Hi, </h1>
+        <input onChange={this.nameInput} id='name' className='inputName' placeholder='your name'/>
         <div className='col-md-12'>
             <input id='Task' className='form-control' placeholder='Name of Task'/>
             <a className="btn" onClick={this.sendPoint} id="messageSubmit">Submit</a>
@@ -75,7 +85,7 @@ class Main extends Component {
                 Oriana
                 </div>
                 <div className='col-md-12 participant2'>
-                CLaudio    
+                {this.state.name}
                 </div>
                 <div className='col-md-12 participant3'>
                 Justin
